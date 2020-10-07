@@ -64,7 +64,10 @@ public final class AppLifecycleMiddleware: Middleware {
         self.notificationPublisher = publisher
     }
     
-    public func receiveContext(getState: @escaping GetState<StateType>, output: AnyActionHandler<OutputActionType>) {
+    public func receiveContext(
+        getState: @escaping GetState<StateType>,
+        output: AnyActionHandler<OutputActionType>
+    ) {
         cancellable = notificationPublisher.receiveContext(getState: getState, output: output)
     }
 

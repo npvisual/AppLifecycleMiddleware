@@ -50,20 +50,19 @@ public protocol NotificationPublisher {
         output: AnyActionHandler<AppLifecycleMiddleware.OutputActionType>) -> AnyCancellable
 }
 
-// TODO: Later change to upcoming (0.8) EffectMiddleware
 public final class AppLifecycleMiddleware: Middleware {
     public typealias InputActionType = Never
     public typealias OutputActionType = AppLifecycleAction
     public typealias StateType = Void
 
     private let notificationPublisher: NotificationPublisher
-    
+
     private var cancellable: AnyCancellable?
 
     init(publisher: NotificationPublisher = NotificationCenter.default) {
         self.notificationPublisher = publisher
     }
-    
+
     public func receiveContext(
         getState: @escaping GetState<StateType>,
         output: AnyActionHandler<OutputActionType>
@@ -71,7 +70,11 @@ public final class AppLifecycleMiddleware: Middleware {
         cancellable = notificationPublisher.receiveContext(getState: getState, output: output)
     }
 
-    public func handle(action: InputActionType, from dispatcher: ActionSource, afterReducer: inout AfterReducer) {
+    public func handle(
+        action: InputActionType,
+        from dispatcher: ActionSource,
+        afterReducer: inout AfterReducer
+    ) {
     }
 }
 

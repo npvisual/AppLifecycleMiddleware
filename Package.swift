@@ -1,7 +1,7 @@
 // swift-tools-version:5.3
 // The swift-tools-version declares the minimum version of Swift required to build this package.
 
-// swiftlint:disable
+// swiftlint:disable all
 
 import PackageDescription
 
@@ -18,7 +18,7 @@ let package = Package(
         // Products define the executables and libraries a package produces, and make them visible to other packages.
         .library(
             name: "AppLifecycleMiddleware",
-            targets: ["AppLifecycleMiddleware"]),
+            targets: ["AppLifecycleMiddleware"])
     ],
     dependencies: [
         // Dependencies declare other packages that this package depends on.
@@ -33,6 +33,6 @@ let package = Package(
             dependencies: [.product(name: "CombineRex", package: "SwiftRex")]),
         .testTarget(
             name: "AppLifecycleMiddlewareTests",
-            dependencies: ["AppLifecycleMiddleware"]),
+            dependencies: ["AppLifecycleMiddleware"])
     ]
 )

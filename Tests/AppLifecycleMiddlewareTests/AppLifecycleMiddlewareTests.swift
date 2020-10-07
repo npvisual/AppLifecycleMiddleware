@@ -6,7 +6,7 @@ final class AppLifecycleMiddlewareTests: XCTestCase {
         // This is an example of a functional test case.
         // Use XCTAssert and related functions to verify your tests produce the correct
         // results.
-        XCTAssertEqual(AppLifecycleMiddleware().text, "Hello, World!")
+//        XCTAssertEqual(AppLifecycleMiddleware().text, "Hello, World!")
     }
 
     static var allTests = [

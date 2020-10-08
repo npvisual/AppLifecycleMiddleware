@@ -12,13 +12,13 @@ opt_in_rules: # some rules are turned off by default, so you need to opt-in
 #   - vertical_whitespace
 
 included: # paths to include during linting. `--path` is ignored if present.
-#  - Source
+  - Sources
 excluded: # paths to ignore during linting. Takes precedence over `included`.
   - Carthage
   - Pods
-  - Source/ExcludedFolder
-  - Source/ExcludedFile.swift
-  - Source/*/ExcludedFile.swift # Exclude files with a wildcard
+  - Sources/ExcludedFolder
+  - Sources/ExcludedFile.swift
+  - Sources/*/ExcludedFile.swift # Exclude files with a wildcard
 analyzer_rules: # Rules run by `swiftlint analyze` (experimental)
   - explicit_self
 

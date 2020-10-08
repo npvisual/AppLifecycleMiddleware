@@ -2,6 +2,7 @@
 // DO NOT EDIT
 
 // swiftlint:disable all
+// swiftformat:disable all
 
 import Foundation
 #if os(iOS) || os(tvOS) || os(watchOS)

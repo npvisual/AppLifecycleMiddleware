@@ -1,15 +1,23 @@
-import XCTest
 @testable import AppLifecycleMiddleware
+import XCTest
 
 final class AppLifecycleMiddlewareTests: XCTestCase {
-    func testExample() {
-        // This is an example of a functional test case.
-        // Use XCTAssert and related functions to verify your tests produce the correct
-        // results.
-//        XCTAssertEqual(AppLifecycleMiddleware().text, "Hello, World!")
+    func testAppLifecycleActions() {
+        let sut = AppLifecycleMiddleware()
+        var getStateCount = 0
+        var dispatchActionCount = 0
+
+        sut.receiveContext(
+            getState: { getStateCount += 1 },
+            output: .init { _, _ in
+                dispatchActionCount += 1
+            }
+        )
+
+        //        XCTAssertEqual(AppLifecycleMiddleware().text, "Hello, World!")
     }
 
     static var allTests = [
-        ("testExample", testExample)
+        ("testExample", testAppLifecycleActions),
     ]
 }

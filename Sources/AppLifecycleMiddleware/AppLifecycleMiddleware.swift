@@ -1,5 +1,5 @@
-import Foundation
 import Combine
+import Foundation
 import SwiftRex
 import UIKit
 
@@ -47,7 +47,8 @@ extension Reducer where ActionType == AppLifecycleAction, StateType == AppLifecy
 public protocol NotificationPublisher {
     func receiveContext(
         getState: @escaping GetState<AppLifecycleMiddleware.StateType>,
-        output: AnyActionHandler<AppLifecycleMiddleware.OutputActionType>) -> AnyCancellable
+        output: AnyActionHandler<AppLifecycleMiddleware.OutputActionType>
+    ) -> AnyCancellable
 }
 
 public final class AppLifecycleMiddleware: Middleware {
@@ -60,7 +61,7 @@ public final class AppLifecycleMiddleware: Middleware {
     private var cancellable: AnyCancellable?
 
     init(publisher: NotificationPublisher = NotificationCenter.default) {
-        self.notificationPublisher = publisher
+        notificationPublisher = publisher
     }
 
     public func receiveContext(
@@ -71,16 +72,15 @@ public final class AppLifecycleMiddleware: Middleware {
     }
 
     public func handle(
-        action: InputActionType,
-        from dispatcher: ActionSource,
-        afterReducer: inout AfterReducer
-    ) {
-    }
+        action _: InputActionType,
+        from _: ActionSource,
+        afterReducer _: inout AfterReducer
+    ) {}
 }
 
 extension NotificationCenter: NotificationPublisher {
     public func receiveContext(
-        getState: @escaping GetState<AppLifecycleMiddleware.StateType>,
+        getState _: @escaping GetState<AppLifecycleMiddleware.StateType>,
         output: AnyActionHandler<AppLifecycleMiddleware.OutputActionType>
     ) -> AnyCancellable {
         let notificationCenter = NotificationCenter.default

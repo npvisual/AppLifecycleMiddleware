@@ -60,7 +60,7 @@ public final class AppLifecycleMiddleware: Middleware {
 
     private var cancellable: AnyCancellable?
 
-    init(publisher: NotificationPublisher = NotificationCenter.default) {
+    public init(publisher: NotificationPublisher = NotificationCenter.default) {
         notificationPublisher = publisher
     }
 

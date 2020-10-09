@@ -2,7 +2,6 @@
 // DO NOT EDIT
 
 // swiftlint:disable all
-// swiftformat:disable all
 
 import Foundation
 #if os(iOS) || os(tvOS) || os(watchOS)
@@ -23,7 +22,7 @@ open class NotificationPublisherMock: NotificationPublisher {
     open var receiveContextGetStateOutputReturnValue: AnyCancellable!
     open var receiveContextGetStateOutputClosure: ((@escaping GetState<AppLifecycleMiddleware.StateType>, AnyActionHandler<AppLifecycleMiddleware.OutputActionType>) -> AnyCancellable)?
 
-    open func receiveContext(        getState: @escaping GetState<AppLifecycleMiddleware.StateType>,        output: AnyActionHandler<AppLifecycleMiddleware.OutputActionType>) -> AnyCancellable {
+    open func receiveContext(        getState: @escaping GetState<AppLifecycleMiddleware.StateType>,        output: AnyActionHandler<AppLifecycleMiddleware.OutputActionType>    ) -> AnyCancellable {
         receiveContextGetStateOutputCallsCount += 1
         receiveContextGetStateOutputReceivedArguments = (getState: getState, output: output)
         return receiveContextGetStateOutputClosure.map({ $0(getState, output) }) ?? receiveContextGetStateOutputReturnValue

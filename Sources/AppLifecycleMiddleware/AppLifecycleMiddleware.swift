@@ -3,12 +3,17 @@ import Foundation
 import SwiftRex
 import UIKit
 
+// MARK: - ACTION
+
+// sourcery: Prism
 public enum AppLifecycleAction {
     case didEnterBackground
     case willEnterForeground
     case didBecomeActive
     case willBecomeInactive
 }
+
+// MARK: - STATE
 
 public enum AppLifecycle: Equatable {
     case backgroundActive
@@ -17,8 +22,10 @@ public enum AppLifecycle: Equatable {
     case foregroundInactive
 }
 
+// MARK: - REDUCER
+
 extension Reducer where ActionType == AppLifecycleAction, StateType == AppLifecycle {
-    static let lifecycle = Reducer { action, state in
+    public static let lifecycle = Reducer { action, state in
         switch (state, action) {
         case (.backgroundActive, .didEnterBackground): return state
         case (.backgroundInactive, .didEnterBackground): return state
@@ -43,6 +50,8 @@ extension Reducer where ActionType == AppLifecycleAction, StateType == AppLifecy
     }
 }
 
+// MARK: - PROTOCOL
+
 // sourcery: AutoMockable
 public protocol NotificationPublisher {
     func receiveContext(
@@ -50,6 +59,8 @@ public protocol NotificationPublisher {
         output: AnyActionHandler<AppLifecycleMiddleware.OutputActionType>
     ) -> AnyCancellable
 }
+
+// MARK: - MIDDLEWARE
 
 public final class AppLifecycleMiddleware: Middleware {
     public typealias InputActionType = Never

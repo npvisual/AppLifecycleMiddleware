@@ -11,6 +11,8 @@ public enum AppLifecycleAction {
     case willEnterForeground
     case didBecomeActive
     case willBecomeInactive
+    case didFinishLaunchingWithOption([UIApplication.LaunchOptionsKey: Any]?)
+    case willFinishLaunchingWithOptions([UIApplication.LaunchOptionsKey: Any]?)
 }
 
 // MARK: - STATE
@@ -46,6 +48,9 @@ extension Reducer where ActionType == AppLifecycleAction, StateType == AppLifecy
         case (.backgroundInactive, .willBecomeInactive): return state
         case (.foregroundActive, .willBecomeInactive): return .foregroundInactive
         case (.foregroundInactive, .willBecomeInactive): return state
+
+        case (_, .willFinishLaunchingWithOptions): return state
+        case (_, .didFinishLaunchingWithOption): return state
         }
     }
 }
@@ -60,6 +65,10 @@ public protocol NotificationPublisher {
     ) -> AnyCancellable
 }
 
+public protocol AppDelegateActionable: UIApplicationDelegate {
+    var output: AnyActionHandler<AppLifecycleAction>? { get set }
+}
+
 // MARK: - MIDDLEWARE
 
 public final class AppLifecycleMiddleware: Middleware {
@@ -68,17 +77,23 @@ public final class AppLifecycleMiddleware: Middleware {
     public typealias StateType = Void
 
     private let notificationPublisher: NotificationPublisher
+    private weak var appDelegate: AppDelegateActionable?
 
     private var cancellable: AnyCancellable?
 
-    public init(publisher: NotificationPublisher = NotificationCenter.default) {
+    public init(
+        publisher: NotificationPublisher = NotificationCenter.default,
+        delegate: AppDelegateActionable? = nil
+    ) {
         notificationPublisher = publisher
+        appDelegate = delegate
     }
 
     public func receiveContext(
         getState: @escaping GetState<StateType>,
         output: AnyActionHandler<OutputActionType>
     ) {
+        appDelegate?.output = output
         cancellable = notificationPublisher.receiveContext(getState: getState, output: output)
     }
 
@@ -95,7 +110,7 @@ extension NotificationCenter: NotificationPublisher {
         output: AnyActionHandler<AppLifecycleMiddleware.OutputActionType>
     ) -> AnyCancellable {
         let notificationCenter = NotificationCenter.default
-        return Publishers.Merge4(
+        return Publishers.Merge5(
             notificationCenter
                 .publisher(for: UIApplication.didBecomeActiveNotification)
                 .map { _ in AppLifecycleAction.didBecomeActive },
@@ -107,10 +122,35 @@ extension NotificationCenter: NotificationPublisher {
                 .map { _ in AppLifecycleAction.didEnterBackground },
             notificationCenter
                 .publisher(for: UIApplication.willEnterForegroundNotification)
-                .map { _ in AppLifecycleAction.willEnterForeground }
+                .map { _ in AppLifecycleAction.willEnterForeground },
+            notificationCenter
+                .publisher(for: UIApplication.didFinishLaunchingNotification)
+                .map { notification in AppLifecycleAction.didFinishLaunchingWithOption(notification.userInfo as? [UIApplication.LaunchOptionsKey: Any]) }
         )
         .sink { action in
             output.dispatch(action)
         }
+    }
+}
+
+public final class AppDelegate: NSObject, UIApplicationDelegate {
+    var output: AnyActionHandler<AppLifecycleAction>?
+
+    public func application(
+        _: UIApplication,
+        didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]? = nil
+    ) -> Bool {
+        output?.dispatch(.didFinishLaunchingWithOption(launchOptions))
+        // TODO: should we use inject a closure to return the boolean
+        return true
+    }
+
+    public func application(
+        _: UIApplication,
+        willFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]? = nil
+    ) -> Bool {
+        output?.dispatch(.willFinishLaunchingWithOptions(launchOptions))
+        // TODO: should we use inject a closure to return the boolean
+        return true
     }
 }

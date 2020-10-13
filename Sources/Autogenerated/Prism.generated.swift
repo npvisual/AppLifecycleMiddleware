@@ -1,6 +1,7 @@
 // Generated using Sourcery 1.0.0 — https://github.com/krzysztofzablocki/Sourcery
 // DO NOT EDIT
 
+// swiftlint:disable all
 extension AppLifecycleAction {
     public var didEnterBackground: Void? {
         get {
@@ -44,6 +45,36 @@ extension AppLifecycleAction {
 
     public var isWillBecomeInactive: Bool {
         self.willBecomeInactive != nil
+    }
+
+    public var didFinishLaunchingWithOption: [UIApplication.LaunchOptionsKey: Any]?? {
+        get {
+            guard case let .didFinishLaunchingWithOption(associatedValue0) = self else { return nil }
+            return (associatedValue0)
+        }
+        set {
+            guard case .didFinishLaunchingWithOption = self, let newValue = newValue else { return }
+            self = .didFinishLaunchingWithOption(newValue)
+        }
+    }
+
+    public var isDidFinishLaunchingWithOption: Bool {
+        self.didFinishLaunchingWithOption != nil
+    }
+
+    public var willFinishLaunchingWithOptions: [UIApplication.LaunchOptionsKey: Any]?? {
+        get {
+            guard case let .willFinishLaunchingWithOptions(associatedValue0) = self else { return nil }
+            return (associatedValue0)
+        }
+        set {
+            guard case .willFinishLaunchingWithOptions = self, let newValue = newValue else { return }
+            self = .willFinishLaunchingWithOptions(newValue)
+        }
+    }
+
+    public var isWillFinishLaunchingWithOptions: Bool {
+        self.willFinishLaunchingWithOptions != nil
     }
 
 }

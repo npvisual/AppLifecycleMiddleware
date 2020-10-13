@@ -54,7 +54,6 @@ let package = Package(
             "pre-commit": [
                 "swift run swiftformat .",
                 "swift run swiftlint autocorrect",
-                "git add .",
             ],
         ],
     ])

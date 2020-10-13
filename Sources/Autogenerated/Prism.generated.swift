@@ -4,39 +4,47 @@
 // swiftlint:disable all
 extension AppLifecycleAction {
     public var didEnterBackground: Void? {
-        guard case .didEnterBackground = self else { return nil }
-        return ()
+        get {
+            guard case .didEnterBackground = self else { return nil }
+            return ()
+        }
     }
 
     public var isDidEnterBackground: Bool {
-        didEnterBackground != nil
+        self.didEnterBackground != nil
     }
 
     public var willEnterForeground: Void? {
-        guard case .willEnterForeground = self else { return nil }
-        return ()
+        get {
+            guard case .willEnterForeground = self else { return nil }
+            return ()
+        }
     }
 
     public var isWillEnterForeground: Bool {
-        willEnterForeground != nil
+        self.willEnterForeground != nil
     }
 
     public var didBecomeActive: Void? {
-        guard case .didBecomeActive = self else { return nil }
-        return ()
+        get {
+            guard case .didBecomeActive = self else { return nil }
+            return ()
+        }
     }
 
     public var isDidBecomeActive: Bool {
-        didBecomeActive != nil
+        self.didBecomeActive != nil
     }
 
     public var willBecomeInactive: Void? {
-        guard case .willBecomeInactive = self else { return nil }
-        return ()
+        get {
+            guard case .willBecomeInactive = self else { return nil }
+            return ()
+        }
     }
 
     public var isWillBecomeInactive: Bool {
-        willBecomeInactive != nil
+        self.willBecomeInactive != nil
     }
 
     public var didFinishLaunchingWithOption: [UIApplication.LaunchOptionsKey: Any]?? {
@@ -51,7 +59,7 @@ extension AppLifecycleAction {
     }
 
     public var isDidFinishLaunchingWithOption: Bool {
-        didFinishLaunchingWithOption != nil
+        self.didFinishLaunchingWithOption != nil
     }
 
     public var willFinishLaunchingWithOptions: [UIApplication.LaunchOptionsKey: Any]?? {
@@ -66,6 +74,7 @@ extension AppLifecycleAction {
     }
 
     public var isWillFinishLaunchingWithOptions: Bool {
-        willFinishLaunchingWithOptions != nil
+        self.willFinishLaunchingWithOptions != nil
     }
+
 }

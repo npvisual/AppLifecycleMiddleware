@@ -11,8 +11,8 @@ public enum AppLifecycleAction {
     case willEnterForeground
     case didBecomeActive
     case willBecomeInactive
-    case didFinishLaunchingWithOption([UIApplication.LaunchOptionsKey: Any]?)
-    case willFinishLaunchingWithOption([UIApplication.LaunchOptionsKey: Any]?)
+    case didFinishLaunchingWithOptions([UIApplication.LaunchOptionsKey: Any]?)
+    case willFinishLaunchingWithOptions([UIApplication.LaunchOptionsKey: Any]?)
 }
 
 // MARK: - STATE
@@ -49,8 +49,8 @@ extension Reducer where ActionType == AppLifecycleAction, StateType == AppLifecy
         case (.foregroundActive, .willBecomeInactive): return .foregroundInactive
         case (.foregroundInactive, .willBecomeInactive): return state
 
-        case (_, .didFinishLaunchingWithOption): return state
-        case (_, .willFinishLaunchingWithOption): return state
+        case (_, .didFinishLaunchingWithOptions): return state
+        case (_, .willFinishLaunchingWithOptions): return state
         }
     }
 }

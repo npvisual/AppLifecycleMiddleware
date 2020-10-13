@@ -12,6 +12,7 @@ public enum AppLifecycleAction {
     case didBecomeActive
     case willBecomeInactive
     case didFinishLaunchingWithOption([UIApplication.LaunchOptionsKey: Any]?)
+    case willFinishLaunchingWithOption([UIApplication.LaunchOptionsKey: Any]?)
 }
 
 // MARK: - STATE
@@ -49,6 +50,7 @@ extension Reducer where ActionType == AppLifecycleAction, StateType == AppLifecy
         case (.foregroundInactive, .willBecomeInactive): return state
 
         case (_, .didFinishLaunchingWithOption): return state
+        case (_, .willFinishLaunchingWithOption): return state
         }
     }
 }
@@ -98,7 +100,7 @@ extension NotificationCenter: NotificationPublisher {
         output: AnyActionHandler<AppLifecycleMiddleware.OutputActionType>
     ) -> AnyCancellable {
         let notificationCenter = NotificationCenter.default
-        return Publishers.Merge5(
+        return Publishers.Merge4(
             notificationCenter
                 .publisher(for: UIApplication.didBecomeActiveNotification)
                 .map { _ in AppLifecycleAction.didBecomeActive },
@@ -110,14 +112,7 @@ extension NotificationCenter: NotificationPublisher {
                 .map { _ in AppLifecycleAction.didEnterBackground },
             notificationCenter
                 .publisher(for: UIApplication.willEnterForegroundNotification)
-                .map { _ in AppLifecycleAction.willEnterForeground },
-            notificationCenter
-                .publisher(for: UIApplication.didFinishLaunchingNotification)
-                .map { notification in
-                    AppLifecycleAction.didFinishLaunchingWithOption(
-                        notification.userInfo as? [UIApplication.LaunchOptionsKey: Any]
-                    )
-                }
+                .map { _ in AppLifecycleAction.willEnterForeground }
         )
         .sink { action in
             output.dispatch(action)

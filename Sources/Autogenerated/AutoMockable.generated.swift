@@ -15,7 +15,7 @@ open class NotificationPublisherMock: NotificationPublisher {
 
     open var receiveContextGetStateOutputCallsCount = 0
     open var receiveContextGetStateOutputCalled: Bool {
-        return receiveContextGetStateOutputCallsCount > 0
+        receiveContextGetStateOutputCallsCount > 0
     }
 
     open var receiveContextGetStateOutputReceivedArguments: (getState: GetState<AppLifecycleMiddleware.StateType>, output: AnyActionHandler<AppLifecycleMiddleware.OutputActionType>)?

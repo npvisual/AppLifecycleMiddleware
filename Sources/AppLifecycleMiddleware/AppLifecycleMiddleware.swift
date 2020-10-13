@@ -125,7 +125,11 @@ extension NotificationCenter: NotificationPublisher {
                 .map { _ in AppLifecycleAction.willEnterForeground },
             notificationCenter
                 .publisher(for: UIApplication.didFinishLaunchingNotification)
-                .map { notification in AppLifecycleAction.didFinishLaunchingWithOption(notification.userInfo as? [UIApplication.LaunchOptionsKey: Any]) }
+                .map { notification in
+                    AppLifecycleAction.didFinishLaunchingWithOption(
+                        notification.userInfo as? [UIApplication.LaunchOptionsKey: Any]
+                    )
+                }
         )
         .sink { action in
             output.dispatch(action)
@@ -133,8 +137,8 @@ extension NotificationCenter: NotificationPublisher {
     }
 }
 
-public final class AppDelegate: NSObject, UIApplicationDelegate {
-    var output: AnyActionHandler<AppLifecycleAction>?
+public final class AppLifecycleMiddlewareDelegate: NSObject, AppDelegateActionable {
+    public var output: AnyActionHandler<AppLifecycleAction>?
 
     public func application(
         _: UIApplication,

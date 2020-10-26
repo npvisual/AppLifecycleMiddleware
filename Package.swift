@@ -25,9 +25,9 @@ let package = Package(
         // Dependencies declare other packages that this package depends on.
         // .package(url: /* package url */, from: "1.0.0"),
         .package(url: "https://github.com/SwiftRex/SwiftRex.git", from: "0.7.4"),
-        .package(url: "https://github.com/nicklockwood/SwiftFormat", from: "0.46.3"),
-        .package(url: "https://github.com/Realm/SwiftLint", from: "0.40.3"),
-        .package(url: "https://github.com/orta/Komondor", from: "1.0.0"),
+//        .package(url: "https://github.com/nicklockwood/SwiftFormat", from: "0.46.3"),
+//        .package(url: "https://github.com/Realm/SwiftLint", from: "0.40.3"),
+//        .package(url: "https://github.com/orta/Komondor", from: "1.0.0"),
     ],
     targets: [
         // Targets are the basic building blocks of a package. A target can define a module or a test suite.
@@ -44,18 +44,18 @@ let package = Package(
 )
 
 // The settings for the git hooks for our repo
-#if canImport(PackageConfig)
-    import PackageConfig
-
-    PackageConfiguration([
-        "komondor": [
-            // When someone has run `git commit`, first run
-            // SwiftFormat and the auto-correcter for SwiftLint
-            "pre-commit": [
-                "swift run swiftformat .",
-                "swift run swiftlint autocorrect",
-            ],
-        ],
-    ])
-        .write()
-#endif
+//#if canImport(PackageConfig)
+//    import PackageConfig
+//
+//    PackageConfiguration([
+//        "komondor": [
+//            // When someone has run `git commit`, first run
+//            // SwiftFormat and the auto-correcter for SwiftLint
+//            "pre-commit": [
+//                "swift run swiftformat .",
+//                "swift run swiftlint autocorrect",
+//            ],
+//        ],
+//    ])
+//        .write()
+//#endif

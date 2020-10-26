@@ -57,7 +57,7 @@ extension Reducer where ActionType == AppLifecycleAction, StateType == AppLifecy
 
 // MARK: - PROTOCOL
 
-// sourcery: AutoMockable
+// sourcery: AutoMockable, imports = ["Combine", "SwiftRex"]
 public protocol NotificationPublisher {
     func receiveContext(
         getState: @escaping GetState<AppLifecycleMiddleware.StateType>,

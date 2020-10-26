@@ -2,6 +2,14 @@
 // DO NOT EDIT
 
 // swiftlint:disable all
+
+import Foundation
+#if os(iOS) || os(tvOS) || os(watchOS)
+import UIKit
+#elseif os(OSX)
+import AppKit
+#endif
+
 extension AppLifecycleAction {
     public var didEnterBackground: Void? {
         get {

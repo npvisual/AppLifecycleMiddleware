@@ -1,4 +1,12 @@
 // swiftlint:disable all
+
+import Foundation
+#if os(iOS) || os(tvOS) || os(watchOS)
+import UIKit
+#elseif os(OSX)
+import AppKit
+#endif
+
 {# Make sure to use an array of 1 for a single import declaration#}
 {# such as :  args: imports = ["SomeModule"]#}
 {# Note that this will be added for all files. If you want more granularity, see below... #}

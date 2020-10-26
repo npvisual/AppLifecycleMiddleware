@@ -11,6 +11,10 @@ import AppKit
 #endif
 
 
+
+import Combine
+import SwiftRex
+
 open class NotificationPublisherMock: NotificationPublisher {
     //MARK: - receiveContext
 

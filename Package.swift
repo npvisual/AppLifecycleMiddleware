@@ -24,7 +24,7 @@ let package = Package(
     dependencies: [
         // Dependencies declare other packages that this package depends on.
         // .package(url: /* package url */, from: "1.0.0"),
-        .package(url: "https://github.com/SwiftRex/SwiftRex.git", from: "0.7.4"),
+        .package(url: "https://github.com/SwiftRex/SwiftRex.git", from: "0.8.0"),
 //        .package(url: "https://github.com/nicklockwood/SwiftFormat", from: "0.46.3"),
 //        .package(url: "https://github.com/Realm/SwiftLint", from: "0.40.3"),
 //        .package(url: "https://github.com/orta/Komondor", from: "1.0.0"),

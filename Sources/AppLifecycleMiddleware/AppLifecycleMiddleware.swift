@@ -7,6 +7,7 @@ import UIKit
 
 // sourcery: Prism
 public enum AppLifecycleAction {
+    case start
     case didEnterBackground
     case willEnterForeground
     case didBecomeActive
@@ -27,30 +28,48 @@ public enum AppLifecycle: Equatable {
 // MARK: - REDUCER
 
 extension Reducer where ActionType == AppLifecycleAction, StateType == AppLifecycle {
-    public static let lifecycle = Reducer { action, state in
+    public static let lifecycle = Reducer.reduce { action, state in
         switch (state, action) {
-        case (.backgroundActive, .didEnterBackground): return state
-        case (.backgroundInactive, .didEnterBackground): return state
-        case (.foregroundActive, .didEnterBackground): return .backgroundActive
-        case (.foregroundInactive, .didEnterBackground): return .backgroundInactive
+        case (_, .start):
+            return
 
-        case (.backgroundActive, .willEnterForeground): return .foregroundActive
-        case (.backgroundInactive, .willEnterForeground): return .foregroundInactive
-        case (.foregroundActive, .willEnterForeground): return state
-        case (.foregroundInactive, .willEnterForeground): return state
+        case (.backgroundActive, .didEnterBackground),
+             (.backgroundInactive, .didEnterBackground):
+            return
+        case (.foregroundActive, .didEnterBackground):
+            state = .backgroundActive
+        case (.foregroundInactive, .didEnterBackground):
+            state = .backgroundInactive
 
-        case (.backgroundActive, .didBecomeActive): return state
-        case (.backgroundInactive, .didBecomeActive): return .backgroundActive
-        case (.foregroundActive, .didBecomeActive): return state
-        case (.foregroundInactive, .didBecomeActive): return .foregroundActive
+        case (.backgroundActive, .willEnterForeground):
+            state = .foregroundActive
+        case (.backgroundInactive, .willEnterForeground):
+            state = .foregroundInactive
+        case (.foregroundActive, .willEnterForeground),
+             (.foregroundInactive, .willEnterForeground):
+            return
 
-        case (.backgroundActive, .willBecomeInactive): return .backgroundInactive
-        case (.backgroundInactive, .willBecomeInactive): return state
-        case (.foregroundActive, .willBecomeInactive): return .foregroundInactive
-        case (.foregroundInactive, .willBecomeInactive): return state
+        case (.backgroundActive, .didBecomeActive):
+            return
+        case (.backgroundInactive, .didBecomeActive):
+            state = .backgroundActive
+        case (.foregroundActive, .didBecomeActive):
+            return
+        case (.foregroundInactive, .didBecomeActive):
+            state = .foregroundActive
 
-        case (_, .didFinishLaunchingWithOptions): return state
-        case (_, .willFinishLaunchingWithOptions): return state
+        case (.backgroundActive, .willBecomeInactive):
+            state = .backgroundInactive
+        case (.backgroundInactive, .willBecomeInactive):
+            return
+        case (.foregroundActive, .willBecomeInactive):
+            state = .foregroundInactive
+        case (.foregroundInactive, .willBecomeInactive):
+            return
+
+        case (_, .didFinishLaunchingWithOptions),
+             (_, .willFinishLaunchingWithOptions):
+            return
         }
     }
 }
@@ -59,16 +78,16 @@ extension Reducer where ActionType == AppLifecycleAction, StateType == AppLifecy
 
 // sourcery: AutoMockable, imports = ["Combine", "SwiftRex"]
 public protocol NotificationPublisher {
-    func receiveContext(
-        getState: @escaping GetState<AppLifecycleMiddleware.StateType>,
+    func start(
+        state: @escaping GetState<AppLifecycleMiddleware.StateType>,
         output: AnyActionHandler<AppLifecycleMiddleware.OutputActionType>
     ) -> AnyCancellable
 }
 
 // MARK: - MIDDLEWARE
 
-public final class AppLifecycleMiddleware: Middleware {
-    public typealias InputActionType = Never
+public final class AppLifecycleMiddleware: MiddlewareProtocol {
+    public typealias InputActionType = AppLifecycleAction
     public typealias OutputActionType = AppLifecycleAction
     public typealias StateType = Void
 
@@ -80,23 +99,19 @@ public final class AppLifecycleMiddleware: Middleware {
         notificationPublisher = publisher
     }
 
-    public func receiveContext(
-        getState: @escaping GetState<StateType>,
-        output: AnyActionHandler<OutputActionType>
-    ) {
-        cancellable = notificationPublisher.receiveContext(getState: getState, output: output)
-    }
+    public func handle(action: AppLifecycleAction, from dispatcher: ActionSource, state: @escaping GetState<Void>) -> IO<AppLifecycleAction> {
+        guard case .start = action else { return .identity }
 
-    public func handle(
-        action _: InputActionType,
-        from _: ActionSource,
-        afterReducer _: inout AfterReducer
-    ) {}
+        return IO { [weak self] output in
+            guard let self = self else { return }
+            self.cancellable = self.notificationPublisher.start(state: state, output: output)
+        }
+    }
 }
 
 extension NotificationCenter: NotificationPublisher {
-    public func receiveContext(
-        getState _: @escaping GetState<AppLifecycleMiddleware.StateType>,
+    public func start(
+        state _: @escaping GetState<AppLifecycleMiddleware.StateType>,
         output: AnyActionHandler<AppLifecycleMiddleware.OutputActionType>
     ) -> AnyCancellable {
         let notificationCenter = NotificationCenter.default

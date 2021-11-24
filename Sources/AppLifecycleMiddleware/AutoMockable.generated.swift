@@ -16,20 +16,20 @@ import Combine
 import SwiftRex
 
 open class NotificationPublisherMock: NotificationPublisher {
-    //MARK: - receiveContext
+    //MARK: - start
 
-    open var receiveContextGetStateOutputCallsCount = 0
-    open var receiveContextGetStateOutputCalled: Bool {
-        return receiveContextGetStateOutputCallsCount > 0
+    open var startStateOutputCallsCount = 0
+    open var startStateOutputCalled: Bool {
+        return startStateOutputCallsCount > 0
     }
-    open var receiveContextGetStateOutputReceivedArguments: (getState: GetState<AppLifecycleMiddleware.StateType>, output: AnyActionHandler<AppLifecycleMiddleware.OutputActionType>)?
-    open var receiveContextGetStateOutputReturnValue: AnyCancellable!
-    open var receiveContextGetStateOutputClosure: ((@escaping GetState<AppLifecycleMiddleware.StateType>, AnyActionHandler<AppLifecycleMiddleware.OutputActionType>) -> AnyCancellable)?
+    open var startStateOutputReceivedArguments: (state: GetState<AppLifecycleMiddleware.StateType>, output: AnyActionHandler<AppLifecycleMiddleware.OutputActionType>)?
+    open var startStateOutputReturnValue: AnyCancellable!
+    open var startStateOutputClosure: ((@escaping GetState<AppLifecycleMiddleware.StateType>, AnyActionHandler<AppLifecycleMiddleware.OutputActionType>) -> AnyCancellable)?
 
-    open func receiveContext(        getState: @escaping GetState<AppLifecycleMiddleware.StateType>,        output: AnyActionHandler<AppLifecycleMiddleware.OutputActionType>    ) -> AnyCancellable {
-        receiveContextGetStateOutputCallsCount += 1
-        receiveContextGetStateOutputReceivedArguments = (getState: getState, output: output)
-        return receiveContextGetStateOutputClosure.map({ $0(getState, output) }) ?? receiveContextGetStateOutputReturnValue
+    open func start(state: @escaping GetState<AppLifecycleMiddleware.StateType>, output: AnyActionHandler<AppLifecycleMiddleware.OutputActionType>    ) -> AnyCancellable {
+        startStateOutputCallsCount += 1
+        startStateOutputReceivedArguments = (state: state, output: output)
+        return startStateOutputClosure.map({ $0(state, output) }) ?? startStateOutputReturnValue
     }
 
 }
